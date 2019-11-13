@@ -1,0 +1,31 @@
+<base href="/static/ecindex/">
+ <!--End 限时特卖 End-->
+    <div class="content mar_20">
+        <img src="images/mban_1.jpg" width="1200" height="110" />
+    </div>
+    <!--Begin 进口 生鲜 Begin-->
+
+    <div class="i_t mar_10" cid="{$top.cid}">
+        <span class="floor_num">{$floor_num}F</span>
+        <span class="fl">{$top.cat_name}</span>
+    {foreach $second as $k=>$v}             
+        <span class="i_mores fr"><a href="#">{$v.cat_name}</a>&nbsp; &nbsp; &nbsp;</span>
+    {/foreach}
+    </div>
+    <div class="content">
+        <div class="fresh_mid">
+            <ul>
+            {volist name="$goods" id="v"}
+                <li>
+                    <div class="img"><a href="#"><img src="{$v.goods_img}" width="185" height="155" /></a></div>
+                    <div class="name"><a href="#">{$v.goods_name}</a></div>
+                    <div class="price">
+                        <font>￥<span>{$v.shop_price}</span></font> &nbsp; 99R
+                    </div>
+                </li> 
+            {/volist}                                                              
+            </ul>
+        </div>
+    </div>
+    
+    <!-- End 广告 End -->

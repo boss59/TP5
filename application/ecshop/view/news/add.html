@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="/static/ecshop/" />
+<title>SHOP 管理中心 - 品牌管理 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="styles/general.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<h1>
+<span class="action-span"><a href="{:url('News/list')}">角色列表</a></span>
+<span class="action-span1"><a href="index.php?act=main">SHOP 管理中心</a> </span><span id="search_id" class="action-span1"> - 角色添加 </span>
+<div style="clear:both"></div>
+</h1>
+
+<div class="main-div">
+<form method="post" action="{:url('add_do')}"  id="form">
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tbody>
+  <tr>
+    <td class="label">角色名称</td>
+    <td>
+      <input type="text" name="qname" maxlength="60" value="">
+      <span class="require-field">*</span>
+    </td>
+  </tr>
+ 
+  <tr>
+    <td class="label">角色描述</td>
+    <td>
+      <textarea name="content" cols="60" rows="4"></textarea>
+      <span class="sp">*</span>
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="2" align="center"><br>
+      <input type="button" class="submit" value=" 确定 " id="sub">
+      <input type="reset" class="reset" value=" 重置 ">
+    </td>
+  </tr>
+</tbody></table>
+</form>
+</div>
+</body>
+</html>
+<script src="/static/jq.js"></script>
+<script>
+$(document).on('click','#sub',function(){
+  var qname = $('[name="qname"]').val();
+  // 正则
+  var reg = /^[\u4e00-\u9fa5\w]{2,30}$/;
+  if (qname=="") {
+    $('.require-field').text('角色名称不能空');
+    return false;
+  }else if(!reg.test(qname)){
+    $('.require-field').text('长度不能超过在2-30');
+    return false;
+  }
+  
+  // 唯一性
+  var falg = true;
+  $.ajax({
+    url:"{:url('News/paly')}",//请求地址
+    type:'POST',//请求的类型
+    dataType:'json',//返回的类型
+    data:{qname:qname},//要传输的数据
+    async:false,
+    success:function(res){ //成功之后回调的方法
+      if (res.count>0) {
+        falg = false;
+      }
+      if (!falg) {
+        alert('角色已存在');
+        return false;
+      }
+      $("form").submit();
+    }
+  })
+})
+</script>

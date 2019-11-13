@@ -1,0 +1,95 @@
+<marquee><h1><font style color='blue'>天堂和地狱没有我选择的权利，只有我被选择的命运！！</font></h1></marquee>
+<div class="panel admin-panel">
+  <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>增加内容</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" action="{:url('admin/Article/update_do')}" enctype="multipart/form-data">
+    <input type="hidden" class="input w50" name="id" value="{$info['id']}"  /> 
+      <div class="form-group">
+          <div class="label">
+            <label>分类标题：</label>
+          </div>
+          <div class="field">
+            <select name="cid" class="input w50">
+              <option value="">请选择分类</option>
+            {volist name='cate' id='v'}
+              <option value="{$v.c_id}" {eq name="info.cid" value='$v.c_id'} selected="" {/eq}>{$v.title}</option>
+          {/volist}
+            </select>
+            <div class="tips"></div>
+          </div>
+        </div>
+        
+         <div class="form-group">
+        <div class="label">
+          <label>图片：</label>
+        </div>
+        <div class="field">
+          <input type="file" name="image" class="button bg-blue margin-left" id="image1" value="+ 浏览上传"  style="float:left;">
+          <div class="tipss">图片尺寸：500*500</div>
+        </div>
+      </div>     
+      
+      <div class="form-group">
+        <div class="label">
+          <label>标题：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" value="{$info['a_title']}" name="a_title"  />
+          <div class="tips"></div>
+        </div>
+      </div>
+
+        <div class="form-group">
+          <div class="label">
+            <label>标签：</label>
+          </div>
+          <div class="field" style="padding-top:8px;"> 
+          {volist name='dao' id='v'}
+             <input name="tag_ids[]" value="{$v.q_id}"  type="checkbox" {in name="v.shen" value='$info.tag_ids'} checked="" {/in}/>{$v.shen}
+          {/volist}
+          </div>
+        </div>
+  
+      
+      <div class="form-group">
+        <div class="label">
+          <label>内容：</label>
+        </div>
+        <div class="field">
+          <textarea name="content" class="input" style="height:200px; border:1px solid #ddd; width:400px;">{$info['content']}</textarea>
+          <div class="tips"></div>
+        </div>
+      </div>
+     
+      <div class="clear"></div>
+      <div class="form-group">
+        <div class="label">
+          <label>来源：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" name="a_laiyuan" value="{$info['a_laiyuan']}"/>
+        </div>
+      </div>
+      
+     
+      <div class="form-group">
+        <div class="label">
+          <label>作者：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="a_man" value="{$info['a_man']}"  />
+          <div class="tips"></div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

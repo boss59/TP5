@@ -1,0 +1,41 @@
+<marquee><h1><font style color='blue'>我注定是生活在黑暗中，也注定是黑暗中的强者！！</font></h1></marquee>
+  <div class="panel admin-panel">
+  <div class="panel-head"><strong class="icon-reorder"> 内容列表</strong></div>
+  <div class="padding border-bottom">
+    <button type="button" class="button border-yellow" onclick="window.location.href='add.html'"><span class="icon-plus-square-o"></span> 分类添加</button>
+  </div>
+  <table class="table table-hover text-center">
+    <tr>
+      <th width="5%">序号：</th>
+      <th width="15%">标题：</th>
+      <th width="10%">时间：</th>
+      <th width="10%">状态：</th>
+      <th width="10%">修改时间：</th>
+      <th width="10%">操作：</th>
+    </tr>
+{volist name='list' id='v'}
+    <tr>
+      <td>{$v['c_id']}</td>
+      <td>{$v['title']}</td>
+      <td>{$v['create_time']}</td>
+      <td>{$v['is_nav']}</td>
+      <td>{$v['update_time']}</td>
+      <!-- <td>{eq name="v.is_nav" value='是'} 是 {else/} 否{/eq}</td> -->
+      <!-- <td>{neq name="v.is_nav" value='是'} 否 {else/} 是 {/neq}</td> -->
+      <td>
+          <div class="button-group"> 
+            <a class="button border-main" href="{:url('update?c_id='.$v['c_id'])}"><span class="icon-edit"></span> 修改</a> 
+            <a class="button border-red" href="{:url('del')}?c_id={$v['c_id']}" onclick="return del(1,2)"><span class="icon-trash-o"></span> 删除</a> 
+          </div>
+      </td>
+    </tr>
+{/volist}
+  </table>
+</div>
+<script type="text/javascript">
+function del(id,mid){
+  if(confirm("您确定要删除吗?")){      
+    
+  }
+}
+</script>

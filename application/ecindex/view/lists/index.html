@@ -1,0 +1,222 @@
+<base href="/static/ecindex/" />
+<div class="i_bg">
+    <div class="postion">
+        <span class="fl">全部 > 美妆个护 > 香水 > </span>
+        <span id="brand_span" class="n_ch" style="display: none">
+            <span class="fl">品牌：<font>香奈儿</font></span>
+            <a class="close" href="javascript:void(0)"><img src="images/s_close.gif" /></a>
+        </span>
+
+        <span id="price_span" class="n_ch" style="display: none">
+            <span class="fl">价格：<font>0</font></span>
+            <a class="close" href="javascript:void(0)"><img src="images/s_close.gif" /></a>
+        </span>
+    </div>
+    <!--Begin 筛选条件 Begin-->
+    <div class="content mar_10">
+        <table border="0" class="choice" style="width:100%; font-family:'宋体'; margin:0 auto;" cellspacing="0" cellpadding="0">
+          <tr valign="top">
+            <td width="70">&nbsp; 品牌：</td>
+            <td class="td_a">
+            {volist name="brand" id="v"}
+                <a siqn="brand" value="{$v.b_id}" {if $s_brand==$v.b_id} class='now' {/if} href="javascript:void(0)">{$v.brand_name}</a>
+            {/volist}
+            </td>
+          </tr>
+          <tr valign="top">
+            <td>&nbsp; 价格：</td>                                         
+            <td class="td_a">
+            {volist name="price" id="v"}
+                <a siqn="price" value="{$v}" {if $s_price==$v} class='now' {/if} href="javascript:void(0)">{$v}</a>
+            {/volist}
+            </td>
+          </tr>                            
+        </table>                                                                                 
+    </div>
+    <!--End 筛选条件 End-->
+    <div class="content mar_20">
+        <div class="l_history">
+            <div class="his_t">
+                <span class="fl">浏览历史</span>
+                <span class="fr"><a href="#">清空</a></span>
+            </div>
+            <ul>
+            {if $avd}
+            {volist name='avd' id="v"}
+                <li>
+                    <div class="img"><a href="{:url('Goods/index',['gid'=>$v.gid])}"><img src="{$v.goods_img}" width="185" height="162" /></a></div>
+                    <div class="name"><a href="{:url('Goods/index',['gid'=>$v.gid])}">{$v.goods_name}</a></div>
+                    <div class="price">
+                        <font>￥<span>{$v.shop_price}</span></font> &nbsp; {$v.gid}R
+                    </div>
+                </li>
+            {/volist}
+            {/if}
+            </ul>
+        </div>
+        <div class="l_list">
+            <div class="list_t">
+                <span class="fl list_or">
+                    <a field="1" href="javascript:void(0)" {if $field==1} class="now" {/if}>
+                        <span orderby="2" class="fl">默认</span>
+                    </a>
+                    <a field="2" href="javascript:void(0)" {if $field==2} class="now" {/if}>
+                        <span orderby="1" class="fl">销量</span>                        
+                        <span orderby="1" class="i_up">销量从低到高显示</span>
+                        <span orderby="2" class="i_down">销量从高到低显示</span>                                                     
+                    </a>
+                    <a field="3" href="javascript:void(0)" {if $field==3} class="now" {/if}>
+                        <span orderby="1" class="fl">价格</span>                        
+                        <span orderby="1" class="i_up">价格从低到高显示</span>
+                        <span orderby="2" class="i_down">价格从高到低显示</span>     
+                    </a>
+                    <a field="4" href="javascript:void(0)" {if $field==4} class="now" {/if}>
+                        <span orderby="2" class="fl">新品</span>
+                    </a>
+                </span>
+                <span class="fr">共发现{$good}件</span>
+            </div>
+            <div class="list_c">
+            
+                <ul class="cate_list">
+                {volist name="goods" id="v"}
+                    <li>
+                        <div class="img"><a href="{:url('Goods/index',['gid'=>$v.gid])}"><img src="{$v.goods_img}" width="210" height="185" /></a></div>
+                        <div class="price">
+                            <font>￥<span><a href="{:url('Goods/index',['gid'=>$v.gid])}">{$v.shop_price}</a></span></font> &nbsp; {$v.gid}R
+                        </div>
+                        <div class="name"><a href="{:url('Goods/index',['gid'=>$v.gid])}">{$v.goods_name}</a></div>
+                        <div class="carbg">
+                            <a onclick="coller({$v.gid})" class="ss">收藏</a>
+                            <a gid="{$v.gid}" class="j_car">加入购物车</a>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+                <div class="pages">
+                    {$goods|raw}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<script>
+// 默认 销量 价格 新品
+jQuery('.list_or span').on('click',function(){
+   // alert(1);
+   jQuery(this).addClass('now').siblings().removeClass('now');
+   var orderby = jQuery(this).attr('orderby');
+   var field = jQuery(this).parent().attr('field');
+   // alert(orderby);
+   // alert(field);
+   getsearch(field,orderby);
+})
+// bug
+jQuery(function(){
+    jQuery('.td_a > .now').each(function(i,v){
+        var siqn = jQuery(this).attr('siqn');
+        var con = jQuery(this).text();
+        jQuery('#'+siqn+'_span').find('font').text(con);
+        jQuery('#'+siqn+'_span').show();
+    })
+})
+// 表识
+jQuery('.td_a a').on('click',function(){
+    jQuery(this).addClass('now').siblings().removeClass('now');
+    var siqn = jQuery(this).attr('siqn');
+    var content = jQuery(this).text();
+    jQuery('#'+siqn+'_span').find('font').text(content);
+    jQuery('#'+siqn+'_span').show();
+    // 搜索
+    getsearch();
+})
+// 消失
+jQuery('.close').on('click',function(){
+    var text = jQuery(this).parent().find('font').text();
+    // alert(text);
+    jQuery('.td_a > .now').each(function(i,v){
+        // alert(i);
+        // alert(v);
+        // alert(jQuery(this).text());
+        if (jQuery(this).text()==text) {
+            jQuery(this).removeClass('now');
+        }
+    })
+    jQuery(this).parent().hide();
+    getsearch();
+})
+// 条件方法
+function getsearch(field='',orderby=''){
+    var str = '';
+    jQuery('.td_a > .now').each(function(i,v){
+        var Keyname = jQuery(this).attr('siqn');
+        var keyname_val = jQuery(this).attr('value');
+        // alert(Keyname);
+        // alert(keyname_val);
+        str +=Keyname+'='+keyname_val+'&';
+    })
+    // alert(str);
+    if (field) {
+        str +='field='+field+'&';
+    }
+     if (orderby) {
+        str +='orderby='+orderby+'&';
+    }
+    // alert(str);return;
+    location.href="{:url('Lists/index',['cid'=>$cid])}?"+str;
+}
+// ------------     收藏     -------------
+function coller(gid)
+{
+    if (!gid) {
+        alert("请选择要收藏的商品");
+    }
+    jQuery.ajax({
+    url:'{:url("Car/addcoller")}',//请求地址
+    type:'post',//请求的类型
+    dataType:'json',//返回的类型
+    data:{gid:gid},//要传输的数据
+    success:function(res){ //成功之后回调的方法
+      // alert(res);
+        if (res.code=="1") {
+          if (confirm(res.msg)) {
+            location.href = "{:url('Login/login')}";
+          }
+        }
+        if (res.code=="0") {
+          alert(res.msg);
+        }
+        if (res.code=="3") {
+          alert(res.msg);
+        }
+    }
+  })
+}
+// -----------------加入 购物车-------------------------
+        jQuery('.j_car').on('click',function(){
+            // alert(1);
+            var gid = jQuery(this).attr('gid');
+            var buy_number = 1;
+            // alert(gid);
+            // alert(buy_number);
+            if ( gid && buy_number) {
+                 jQuery.ajax({
+                    url:"{:url('Lists/addlistcar')}",//请求地址
+                    type:'POST',//请求的类型
+                    dataType:'json',//返回的类型
+                    data:{gid:gid,goods_number:buy_number},//要传输的数据
+                    success:function(res){ //成功之后回调的方法
+                        // alert(res);
+                        if (res.code =="1") {
+                            alert(res.msg);
+                        }
+                        if (res.code =="0") {
+                            alert(res.msg);
+                            window.location.reload();
+                        }
+                    }
+                }) 
+            }
+               
+        })
+</script>

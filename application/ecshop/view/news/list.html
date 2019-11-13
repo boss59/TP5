@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="/static/ecshop/" />
+<title>SHOP 管理中心 - 品牌管理 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="styles/general.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/page.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<h1>
+<span class="action-span"><a href="{:url('News/add')}">添加角色</a></span>
+<span class="action-span1"><a href="index.php?act=main">SHOP 管理中心</a> </span><span id="search_id" class="action-span1"> - 商品品牌 </span>
+<div style="clear:both"></div>
+</h1>
+
+<div class="form-div">
+  <form action="javascript:search_brand()" name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+     <input type="text" name="brand_name" size="15">
+    <input type="submit" value=" 搜索 " class="button">
+  </form>
+</div>
+
+<form method="post" action="" name="listForm">
+<!-- start brand list -->
+<div class="list-div" id="listDiv">
+
+  <table cellpadding="3" cellspacing="1">
+		<tr>
+			<th>编号</th>
+			<th>角色名称</th>
+			<th>角色描述</th>
+			<th>添加时间</th>
+			<th>操作</th>
+		</tr>
+  <tbody id="list">
+  {volist name="list" id="v"}
+    <tr>
+			<td align="center">{$v.qid}</td>
+			<td align="center">{$v.qname}</td>
+			<td align="center">{$v.content}</td>
+			<td align="center">{$v.create_time}</td>
+			<td align="center">
+				<a href="{:url('update',['qid'=>$v.qid])}" title="编辑" >编辑</a> |
+				<a href="{:url('del')}?qid={$v.qid}" title="删除" class="del">移除</a> 
+			</td>
+		</tr>
+  {/volist}
+  </tbody>
+    <tr>
+		  <td align="center" nowrap="true" colspan="5">
+        <div id="page">{$list|raw}</div>
+      </td>
+    </tr>
+</table>
+
+</div>
+</form>
+<div id="footer">
+	版权所有 &copy; 2006-2013 软工教育 - 高级PHP - </div>
+</div>
+</body>
+</html>
+<script src="/static/jq.js"></script>
+<script>
+// 删除
+$(document).on('click','.del',function(){
+  event.preventDefault();//阻止默认事件行为的触发  a 标签
+  var _this = $(this);//定义
+  var url = _this.attr('href');//获取 a 标签// alert(url);
+  $.ajax({
+    url:url,//请求地址
+    success:function(res){ //成功之后回调的方法
+      if(res == 1){
+        alert("删除成功");
+        // var p = $('#page .active').text();
+        // var url = "{:url('brands/brand_list')}?page="+p;
+        // page(url);
+      }else{
+          alert("删除失败");
+      }
+      _this.parent().parent().remove(); //找到上一级td 找到上一级tr
+    }
+  })
+})
+// ------------------------分页--------------------------------------
+
+// ------------------------方法--------------------------------------
+</script>

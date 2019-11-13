@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="/static/ecshop/" />
+<title>SHOP 管理中心 - 品牌管理 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="styles/general.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<h1>
+<span class="action-span"><a href="brand.php?act=list">优惠券 </a></span>
+<span class="action-span1"><a href="index.php?act=main">SHOP 管理中心</a> </span><span id="search_id" class="action-span1"> - 添加优惠券 </span>
+<div style="clear:both"></div>
+</h1>
+
+<div class="main-div">
+<form method="post" action="{:url('Cou/add_do')}" name="theForm" >
+<table cellspacing="1" cellpadding="3" width="100%">
+  <tbody>
+  <tr>
+    <td class="label">优惠券张数：</td>
+    <td><input type="text" name="num" maxlength="60" value=""><span class="require-field">*</span></td>
+  </tr>
+  <tr>
+    <td class="label">优惠券金额：</td>
+    <td><input type="text" name="price" maxlength="60" size="40" value=""></td>
+  </tr>
+  <tr>
+    <td class="label">商品分类</td>
+    <td>
+        <select name="cid" >
+        {volist name="cat" id="v"}
+            <option value="{$v.cid}">{:str_repeat("&nbsp;&nbsp;&nbsp;",$v.level-1).$v.cat_name}</option>
+        {/volist}
+        </select>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="label">使用条件</td>
+    <td><input type="text" name="is_number" maxlength="40" size="15"></td>
+  </tr>
+  
+  <tr>
+    <td colspan="2" align="center"><br>
+      <input type="submit" class="button" value=" 确定 ">
+      <input type="reset" class="button" value=" 重置 ">
+    </td>
+  </tr>
+</tbody></table>
+</form>
+</div>
+
+</body>
+</html>

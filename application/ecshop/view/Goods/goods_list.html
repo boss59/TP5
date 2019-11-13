@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<base href="/static/ecshop/" />
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title></title>
+	<link href="styles/general.css" rel="stylesheet" type="text/css" />
+	<link href="styles/main.css" rel="stylesheet" type="text/css" />
+	<style>
+		ul li{
+			display: inline;
+		}
+	</style>
+</head>
+<body>
+<h1>
+	<span class="action-span"><a href="{:url('Goods/goods_add')}">添加新商品</a></span>
+	<span class="action-span1"><a href="index.php?act=main">SHOP 管理中心</a> </span><span id="search_id" class="action-span1"> - 商品列表 </span>
+	<div style="clear:both"></div>
+</h1>
+
+<div class="form-div">
+  <form action="" >
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+        <!-- 分类 -->
+    <select name="cid" value="{$cid}">
+		<option value="0">所有分类</option>
+{volist name="cat" id="v"}
+		<option value="{$v.cid}">{:str_repeat("&nbsp;&nbsp;&nbsp;",$v.level-1).$v.cat_name}</option>
+{/volist}
+	</select>
+    <!-- 品牌 -->
+    <select name="b_id" value="{$b_id}">
+		<option value="0">所有品牌</option>
+	{volist name="brand" id="v"}
+		<option value="{$v.b_id}">{$v.brand_name}</option>
+	{/volist}
+	</select>
+    <!-- 推荐 -->
+    <!-- <select name="intro_type">
+		<option value="0">全部</option>
+		<option value="is_best">精品</option>
+		<option value="is_new">新品</option>
+		<option value="is_hot">热销</option>
+		<option value="is_promote">特价</option>
+		<option value="all_type">全部推荐</option>
+	</select> -->
+         
+     <!-- 供货商 -->
+  <!--    <select name="suppliers_id">
+		<option value="0">全部</option>
+		<option value="1">北京供货商</option>
+		<option value="2">上海供货商</option>
+	</select> -->
+    <!-- 上架 -->
+     <select name="is_sale" value="{$is_sale}">
+		<option value="">全部</option>
+		<option value="1">上架</option>
+		<option value="2">下架</option>
+	</select>
+	<!-- 关键字 -->
+	
+		关键字 <input type="text" name="goods_name" size="15" value="{$username}">
+		<input type="button" value="搜索" id="ser">
+  </form>
+</div>
+
+<form method="post" action="" name="listForm" onsubmit="return confirmSubmit(this)">
+  <!-- start goods list -->
+	<div class="list-div" id="listDiv">
+		<table cellpadding="3" cellspacing="1">
+				<tr>
+					<th><input type="checkbox" id="xxoo" >编号</th>
+					<th>商品名称</th>
+					<th>货号</th>
+					<th>价格</th>
+					<th>图片</th>
+					<!-- <th>上架</th>
+					<th>精品</th>
+					<th>新品</th>
+					<th>热销</th> -->
+					<th>描述</th>
+					<th>数量</th>
+					<th>供货商</th>
+					<th>分类</th>
+					<th>品牌</th>
+					<th>是否上架</th>
+					<th>加入推荐</th>
+					<th>操作</th>
+				</tr>
+			<tbody id="list">
+			{volist name="list" id="v"}
+				<tr id="{$v.gid}">
+					<td><input type="checkbox" name="checkboxes[]" value="{$v.gid}">{$v.gid}</td>
+					<td class="goods_name">
+						<span>{$v.goods_name}</span>
+						<input type="text" style="display:none;" />
+					</td>
+					<td align="center"><span>{$v.goods_sn}</span></td>
+					<td align="center"><span>{$v.shop_price}</span></td>
+					<td align="center"><img src="{$v.goods_img}" width="70" height="50"/></td>
+					<td align="center">{$v.goods_desc}</td>
+					<!-- <td align="center"><img src="images/yes.gif"></td>
+					<td align="center"><img src="images/yes.gif"></td>
+					<td align="center"><img src="images/yes.gif"></td>
+					<td align="center"><img src="images/yes.gif"></td> -->
+
+					<td align="center">{$v.goods_number}</td>
+					<td align="center"><span>
+
+					<?php if($v['suppliers_id']==0){ 
+						echo ('不指定供货商属于本店商品');
+					}else if($v['suppliers_id']==1){ 
+						echo ('北京供货商');
+					}else{ 
+						echo ('上海供货商');
+					} ?>
+					</span></td>
+
+					<td align="center">{$v.cat_name}</td>
+
+					<td align="center">{$v.brand_name}</td>
+					<!-- 是否 -->
+					{eq name="v.is_sale" value="2"}
+						<td align="center"><img src="images/no.gif"  class="is_sale" is_sale="2"></td>
+					{else/}
+						<td align="center"><img src="images/yes.gif"  class="is_sale" is_sale="1"></td>
+					{/eq}
+					{eq name="v.is_best" value="1"}
+						<td align="center"><img src="images/yes.gif"></td>
+					{else/}
+						<td align="center"><img src="images/no.gif"></td>
+					{/eq}
+					<!-- 操作 -->
+					<td align="center">
+						<a href="../goods.php?id=32" target="_blank" title="查看"><img src="images/icon_view.gif" width="16" height="16" border="0"></a>
+						<a href="goods.php?act=edit&amp;goods_id=32" title="编辑"><img src="images/icon_edit.gif" width="16" height="16" border="0"></a>
+						<a href="goods.php?act=copy&amp;goods_id=32" title="复制"><img src="images/icon_copy.gif" width="16" height="16" border="0"></a>
+						<a href="javascript:;" onclick="listTable.remove(32, '您确实要把该商品放入回收站吗？')" title="回收站"><img src="images/icon_trash.gif" width="16" height="16" border="0"></a>
+						<a href="goods.php?act=product_list&amp;goods_id=32" title="货品列表"><img src="images/icon_docs.gif" width="16" height="16" border="0"></a>          
+					</td>
+				</tr>
+			{/volist}
+			</tbody>
+  <!-- end 这段代码没有格式化，只是暂时显示数据用 开发的时候将会删除-->
+  			<!-- 分页 -->
+  			<tr>
+				<td colspan="12" align="center"><div id="page">{$page|raw}</div></td>
+  			</tr>
+ </table>
+</div>
+<div>
+	<!-- <input type="hidden" name="act" value="batch">
+	<select name="type" id="selAction" onchange="changeAction()">
+		<option value="">请选择...</option>
+		<option value="trash">回收站</option>
+		<option value="on_sale">上架</option>
+		<option value="not_on_sale">下架</option>
+		<option value="best">精品</option>
+		<option value="not_best">取消精品</option>
+		<option value="new">新品</option>
+		<option value="not_new">取消新品</option>
+		<option value="hot">热销</option>
+		<option value="not_hot">取消热销</option>
+		<option value="move_to">转移到分类</option>
+		<option value="suppliers_move_to">转移到供货商</option>
+	</select>
+
+    <input type="hidden" name="extension_code" value=""> -->
+   <!--  <input type="submit" value=" 确定 " id="btnSubmit" name="btnSubmit" class="button" disabled="true"> -->
+   <input type="button" value=" 批量删除 " id="delxx" >
+</div>
+</form>
+
+<div id="footer">
+	版权所有 &copy; 2006-2013 软工教育 - 高级PHP - 
+</div>
+
+</body>
+</html>
+<script src="/static/jq.js"></script>
+<script>
+// ------------------修改图标--------------------------
+$(document).on('click','.is_sale',function(){
+  var is_show = $(this).attr('is_sale');
+  var brand_id = $(this).parent().parent().attr('id');
+  var _this = $(this);
+  // alert(is_show);
+  // alert(brand_id);
+    $.ajax({
+      url:"{:url('goods/is')}",//请求地址
+      type:'get',//请求的类型
+      dataType:'json',//返回的类型
+      data:{is_sale:is_show,gid:brand_id},//要传输的数据
+      success:function(res){ //成功之后回调的方法
+         if (is_show==1) {
+           _this.attr('src',"images/yes.gif").attr('is_sale','0');
+         }else{
+           _this.attr('src',"images/no.gif").attr('is_sale','1');
+         }
+      }
+    })
+})
+// ------------------修改名称--------------------------
+$(document).on('click','.goods_name span',function(){
+	var span = $(this);// 定义 span 标签
+	var input = span.next();// 找 input 标签
+	span.hide();// span 隐藏
+	input.show(); // input 显示
+	var name = span.html();// 获取 span 的值
+	input.val(name);//放到 input里
+	input.focus();//聚焦 input 标签
+})
+$(document).on('blur','.goods_name input',function(){
+	var input = $(this);//定义 input 标签
+	var span = input.prev();// 找上一级 的 span
+	input.hide();// span 隐藏
+	span.show(); // input 显示
+	var names = input.val();// 获取 input 的值
+	span.text(names);// 放到 span 里
+	var gid = input.parent().parent().attr("id");//获取 id
+	// alert(gid);
+	$.ajax({
+      url:'{:url("is")}',//请求地址
+      type:'get',//请求的类型
+      dataType:'json',//返回的类型
+      data:{goods_name:names,gid:gid},//要传输的数据
+      success:function(res){ //成功之后回调的方法
+      }
+    })
+})
+// ------------------全选 反选--------------------------
+$('#xxoo').on('click',function(){
+	// var status = $(this).prop('checked');
+	// // if判断 选中
+	// if (status) {
+	// 	//全选
+	// 	$('[name="checkboxes[]"]').prop('checked',true);
+	// }else{
+	// 	//反选
+	// 	$('[name="checkboxes[]"]').prop('checked',false);
+	// }
+	// =====简写
+	$('[name="checkboxes[]"]').prop('checked',$(this).prop('checked'));
+})
+// -------------------批量删除-------------------------
+$(document).on('click','#delxx',function(){
+	var _this = $('#list');
+	// 获取 选中的 input 的值
+	var odj = $('[name="checkboxes[]"]:checked');
+	// alert(odj);
+	var arr = new Array();// 定义数组
+	// 循环 odj
+	$.each(odj,function(){
+		var id = $(this).val();
+		arr.push(id);// 把id 放到数组中
+	})
+	// 发送请求
+	$.ajax({
+		url:"{:url('Goods/del')}",//请求地址
+		type:'get',//请求的类型
+		dataType:'json',//返回的类型
+		data:{gid:arr},//要传输的数据
+		success:function(res){ //成功之后回调的方法
+			if (res==1) {
+				alert('删除成功');
+				var p = $('#page .active').text();
+		        var url = "{:url('Goods/goods_list')}?page="+p;
+		        page(url);
+			}else{
+				alert('删除失败');
+			}
+			_this.find().remove();
+		}
+	})
+})
+
+
+//------------------关键字搜索--------------------------
+$('#ser').on('click',function(){
+	var url = "{:url('Goods/goods_list')}";
+	// alert(1);
+	page(url);
+})
+//------------------分页--------------------------
+$(document).on('click','#page a',function(){
+	event.preventDefault();
+	var url = $(this).attr('href');
+
+	page(url);
+})
+// --------------方法-------------------
+function page(url)
+{
+	var cid = $('[name="cid"]').val();
+	var b_id = $('[name="b_id"]').val();
+	var is_sale = $('[name="is_sale"]').val();
+	var name = $('[name="goods_name"]').val();
+	$.ajax({
+		url:url,//请求地址
+		type:'get',//请求的类型
+		dataType:'json',//返回的类型
+		data:{goods_name:name,cid:cid,b_id:b_id,is_sale:is_sale},//要传输的数据
+		success:function(res){ //成功之后回调的方法
+			$('#list').empty();// 清空 list 区域
+			$.each(res.data, function(k,v) {
+			    var tr = $("<tr id='"+v.gid+"'></tr>");// 创建 tr
+			    tr.append('<td align="center"><input type="checkbox" name="checkboxes[]" value="'+v.gid+'">'+v.gid+'</td>');
+			    tr.append('<td align="center" class="goods_name"><span>'+v.goods_name+'</span><input type="text" style="display:none;" /></td>');
+			    tr.append('<td align="center">'+v.goods_sn+'</td>');
+			    tr.append('<td align="center">'+v.shop_price+'</td>');
+			    tr.append('<td align="center"><img src="'+v.goods_img+'" width="70" height="50"/></td>');
+			    tr.append('<td align="center">'+v.goods_desc+'</td>');
+			    tr.append('<td align="center">'+v.goods_number+'</td>');
+			    // 供应商
+			   	if(v.suppliers_id==0){
+			   		tr.append('<td align="center">不指定供货商属于本店商品</td>');	
+				}else if(v.suppliers_id==1){
+					tr.append('<td align="center">北京供货商</td>');
+				}else{
+					tr.append('<td align="center">上海供货商</td>');
+				}
+				tr.append('<td align="center">'+v.cat_name+'</td>');
+			    tr.append('<td align="center">'+v.brand_name+'</td>');
+			    //是否
+			    if(v.is_sale==2){
+			   		tr.append('<td align="center"><img src="images/no.gif" class="is_sale" is_sale="2"></td>');	
+				}else{
+					tr.append('<td align="center"><img src="images/yes.gif" class="is_sale" is_sale="1"></td>');
+				}
+				// 操作
+				tr.append('<td align="center">\
+					<a href="../goods.php?id=32" target="_blank" title="查看"><img src="images/icon_view.gif" width="16" height="16" border="0"></a>\
+					<a href="goods.php?act=edit&amp;goods_id=32" title="编辑"><img src="images/icon_edit.gif" width="16" height="16" border="0"></a>\
+					<a href="goods.php?act=copy&amp;goods_id=32" title="复制"><img src="images/icon_copy.gif" width="16" height="16" border="0"></a>\
+					<a href="javascript:;" onclick="listTable.remove(32, "您确实要把该商品放入回收站吗？")" title="回收站"><img src="images/icon_trash.gif" width="16" height="16" border="0"></a>\
+					<a href="goods.php?act=product_list&amp;goods_id=32" title="货品列表"><img src="images/icon_docs.gif" width="16" height="16" border="0"></a></td>');
+				$('#list').append(tr).css("color","blue");
+			})
+			$('#page').html(res.page);
+		}
+	})
+}
+</script>

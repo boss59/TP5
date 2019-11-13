@@ -1,0 +1,29 @@
+<marquee><h1><font style color='blue'>逆了苍天，踏破碧落黄泉！！！</font></h1></marquee>
+<div class="body-content">
+    <div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>导航修改</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" action="{:url('admin/User/update_do')}">
+    <input type="hidden" class="input" name="q_id" value="{$info['q_id']}" />
+      <div class="form-group">
+        <div class="label">
+          <label>导航：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" name="shen" value="{$info['shen']}" />
+          <div class="tips"></div>
+        </div>
+      </div>
+     <!-- ======================================================= -->
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit">修改</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+

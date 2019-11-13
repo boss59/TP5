@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="/static/ecshop/" />
+<title>SHOP 管理中心 - 品牌管理 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="styles/general.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<h1>
+<span class="action-span1"><a href="index.php?act=main">SHOP 管理中心</a> </span><span id="search_id" class="action-span1"> - 用户列表 </span>
+<div style="clear:both"></div>
+</h1>
+
+
+
+<form method="post" action="" name="listForm">
+<!-- start brand list -->
+<div class="list-div" id="listDiv">
+
+  <table cellpadding="3" cellspacing="1">
+		<tr>
+			<th>编号</th>
+			<th>用户名称</th>
+			<th>是否是会员</th>
+      <th>操作</th>
+		</tr>
+  <tbody id="list">
+  {volist name="list" id="v"}
+    <tr rid="{$v.r_id}">
+      <td align="center">{$v.r_id}</td>
+			<td align="center">{$v.user}</td>
+      {eq name="v.status" value="1"}
+        <td align="center"><img src="images/yes.gif" class="status" status="0"></td>
+      {else/}
+        <td align="center"><img src="images/no.gif" class="status" status="1"></td>
+      {/eq}
+      <td align="center">
+          <a href="">删除</a> ||
+          <a href="">修改</a>
+      </td>
+    </tr>
+  {/volist}
+  </tbody>
+</table>
+<!-- end brand list -->
+</div>
+</form>
+<div id="footer">
+	版权所有 &copy; 2006-2013 软工教育 - 高级PHP - </div>
+</div>
+</body>
+</html>
+<script src="/static/jq.js"></script>
+<script>
+$(document).on('click','.status',function(){
+  var status = $(this).attr('status');
+  var rid = $(this).parent().parent().attr('rid');
+  var _this = $(this);
+  // alert(status);
+  // alert(rid);
+    $.ajax({
+      url:"{:url('Customer/status')}",//请求地址
+      type:'get',//请求的类型
+      dataType:'json',//返回的类型
+      data:{status:status,r_id:rid},//要传输的数据
+      success:function(res){ //成功之后回调的方法
+         if (status==1) {
+          _this.attr('src',"images/yes.gif").attr('status','0');
+         }else{
+          _this.attr('src',"images/no.gif").attr('status','1');
+         }
+      }
+    })
+})
+</script>

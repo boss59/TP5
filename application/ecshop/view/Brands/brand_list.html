@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<base href="/static/ecshop/">
+<title>SHOP 管理中心 - 品牌管理 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="styles/general.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<style>
+    ul li{
+      display:inline;
+    }
+  </style>
+</head>
+<body>
+
+<h1>
+<span class="action-span"><a href="{:url('Brands/brand_add')}">添加品牌</a></span>
+<span class="action-span1"><a href="index.php?act=main">SHOP 管理中心</a> </span><span id="search_id" class="action-span1"> - 商品品牌 </span>
+<div style="clear:both"></div>
+</h1>
+
+<div class="form-div">
+  <form name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH">
+     <input type="text" name="brand_name" size="15" value="{$username}">
+    <input type="button" value=" 搜索 " class="button" id="ser">
+  </form>
+</div>
+
+<form method="post" action="" name="listForm">
+<!-- start brand list -->
+<div class="list-div" id="listDiv">
+
+  <table cellpadding="3" cellspacing="1">
+    
+    <tr>
+      <th>品牌名称</th>
+      <th>品牌网址</th>
+      <th>品牌描述</th>
+      <th>排序</th>
+      <th>是否显示</th>
+      <th>操作</th>
+    </tr>
+
+    <tbody id="list">
+{volist name="list" id="v"}
+    <tr brand_id="{$v.b_id}">
+      <td class="first-cell brand_name">
+        <img src="{$v.brand_logo}" width="16" height="16" border="0" alt="品牌LOGO">
+        <span>{$v.brand_name}</span>
+        <input type="text" name="" style="display:none" />
+      </td>
+
+      <td><a href="http://www.nokia.com.cn/" target="_brank">{$v.site_url}</a></td>
+
+      <td align="left" >{$v.brand_desc}</td>
+
+      <td align="right"><span>{$v.sort_order}</span></td>
+
+      <td align="center">
+      {eq name="v.is_show" value="1"}
+        <img src="images/yes.gif" class="is_show" is_show="0">
+      {else/}
+        <img src="images/no.gif" class="is_show" is_show="1">
+      {/eq}
+      </td>
+
+      <td align="center">
+        <a href="{:url('update')}?b_id={$v.b_id}" title="编辑">修改</a> |
+        <a class="del" href="{:url('del')}?b_id={$v.b_id}" title="编辑">移除</a> 
+      </td>
+    </tr>
+  {/volist}
+    </table>
+  </tbody>
+    <!--start，这些都是显示代码，没有格式化，开发时会删除 -->
+    <tr>
+        <td nowrap="true" colspan="7">
+            <div id="page">{$list|raw}</div>
+        </td>
+    </tr>
+  
+
+<!-- end brand list -->
+</div>
+</form>
+
+<div id="footer">
+  版权所有 &copy; 2006-2013 软工教育 - 高级PHP - </div>
+</div>
+
+</body>
+</html>
+<script src="/static/jq.js"></script>
+<script>
+//------------------------ajax修改图标------------------------------  
+$(document).on('click','.is_show',function(){
+  var is_show = $(this).attr('is_show');
+  var brand_id = $(this).parent().parent().attr('brand_id');
+  var _this = $(this);
+  // alert(is_show);
+  // alert(brand_id);
+    $.ajax({
+      url:"{:url('brands/is_show')}",//请求地址
+      type:'get',//请求的类型
+      dataType:'json',//返回的类型
+      data:{is_show:is_show,b_id:brand_id},//要传输的数据
+      success:function(res){ //成功之后回调的方法
+         if (is_show==1) {
+           _this.attr('src',"images/yes.gif").attr('is_show','0');
+         }else{
+           _this.attr('src',"images/no.gif").attr('is_show','1');
+         }
+      }
+    })
+})
+//------------------------ajax修改名称------------------------------
+ $(document).on('click','.brand_name span',function(){
+    var span = $(this);//定义 span标签
+    var input = span.next();//找 同级 input 标签
+    span.hide();//span 隐藏
+    input.show();//input 显示
+    var name = span.html();//获取 span 的值 // alert(name);
+    input.val(name);//放到 input里
+    input.focus();//聚焦 input 标签
+ })
+ $(document).on('blur','.brand_name input',function(){
+    var input = $(this);//定义 input 标签
+    var span = input.prev();// 找上一级的 span
+    input.hide();//隐藏 input
+    span.show();//显示  span
+    var names = input.val();//获取 input 的值
+    span.text(names);// 放到 span里
+    var brand_id = input.parent().parent().attr("brand_id");//获取 id
+    $.ajax({
+      url:'{:url("is_show")}',//请求地址
+      type:'get',//请求的类型
+      dataType:'json',//返回的类型
+      data:{brand_name:names,b_id:brand_id},//要传输的数据
+      success:function(res){ //成功之后回调的方法
+
+      }
+    })
+ })
+//------------------------ajax搜索------------------------------  
+  $('#ser').on('click',function(){
+    var url = "{:url('brands/brand_list')}";
+    page(url);
+  })
+// //------------------------ajax删除------------------------------  
+$(document).on('click','.del',function(){
+  event.preventDefault();//阻止默认事件行为的触发  a 标签
+  var _this = $(this);//定义
+  var url = _this.attr('href');//获取 a 标签// alert(url);
+  $.ajax({
+    url:url,//请求地址
+    success:function(res){ //成功之后回调的方法
+      if(res == 1){
+        alert("ojbk");
+        var p = $('#page .active').text();
+        var url = "{:url('brands/brand_list')}?page="+p;
+        page(url);
+      }else{
+          alert("删除失败");
+      }
+      _this.parent().parent().remove(); //找到上一级td 找到上一级tr
+    }
+  })
+})
+// //------------------------ajax分页------------------------------  
+$(document).on('click','#page a',function(){
+  event.preventDefault();//阻止默认事件行为的触发  a 标签
+  var url = $(this).attr('href');//获取  a 标签// alert(url);
+  page(url);
+})
+//---------------------总调用分页 搜索 方法----------------------------------
+function page(url)
+{
+  var name = $('[name="brand_name"]').val();
+  $.ajax({
+    url:url,//请求地址
+    type:'get',//请求的类型
+    dataType:'json',//返回的类型
+    data:{brand_name:name},
+    success:function(res){ //成功之后回调的方法
+      $('#list').empty();//清空 tr td
+      $.each(res.data,function(k,v){
+        var tr = $('<tr brand_id="'+v.b_id+'"></tr>');//创建td
+
+        tr.append('<td class="first-cell brand_name"><img src="'+v.brand_logo+'" width="16" height="16" border="0" alt="品牌LOGO"><span>'+v.brand_name+'</span><input type="text" name="" style="display:none" /></td>');
+
+        tr.append('<td align="center"><a href="http://www.nokia.com.cn/" target="_brank">'+v.site_url+'</a></td>');
+
+        tr.append('<td align="center">'+v.brand_desc+'</td>');
+        tr.append('<td align="center">'+v.sort_order+'</td>');
+
+        if(v.is_show==1){
+          tr.append('<td align="center"><img src="images/yes.gif" class="is_show" is_show="0"></td>');
+        }else{
+          tr.append('<td align="center"><img src="images/no.gif" class="is_show" is_show="1"></td>');
+        }
+
+        tr.append('<td align="center"> <a href="{:url("update")}?b_id='+v.b_id+'" title="编辑">修改</a> |<a class="del" href="{:url("del")}?b_id='+v.b_id+'" title="编辑">移除</a></td>');
+        $('#list').append(tr).css('color','blue');
+      })
+       $('#page').html(res.page);//替换页码
+    }
+  })
+}
+</script>

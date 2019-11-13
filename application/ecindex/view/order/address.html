@@ -1,0 +1,79 @@
+    <form id="addressform" action="{:url('Order/saveaddress')}" method="post">
+    <input type="hidden" name="gid" value="{$gid}">
+        <table  border="0" class="add_tab" style="width:930px; margin-top: 40px;"  cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="135" align="right">配送地区</td>
+                <td colspan="3" style="font-family:'宋体';">
+                	<select class="jj" name="country">
+                      <option value="0" selected="selected">请选择...</option>
+                    {foreach $region as $k=>$v}
+                      <option value="{$v.region_id}">{$v.region_name}</option>
+                    {/foreach}
+                    </select>
+                	<select class="jj" name="province" style="background-color:#f6f6f6; display: none;">
+                      <option value="0" selected="selected">请选择...</option>
+                    </select>
+                    <select class="jj" name="city" style="background-color:#f6f6f6; display: none;">
+                      <option value="0" selected="selected">请选择...</option>
+                    </select>
+                    <select class="jj" name="district" style="background-color:#f6f6f6; display: none;">
+                      <option value="0" selected="selected">请选择...</option>
+                    </select>
+                    （必填）
+                </td>
+              </tr>
+              <tr>
+                <td align="right">收货人姓名</td>
+                <td style="font-family:'宋体';"><input type="text" name="consignee" value="姓名" class="add_ipt" />（必填）</td>
+                <td align="right">电子邮箱</td>
+                <td style="font-family:'宋体';"><input type="text" name="email" value="12345678@qq.com" class="add_ipt" />（必填）</td>
+              </tr>
+              <tr>
+                <td align="right">详细地址</td>
+                <td style="font-family:'宋体';"><input type="text" name="address" value="世外桃源" class="add_ipt" />（必填）</td>
+                <td align="right">邮政编码</td>
+                <td style="font-family:'宋体';"><input type="text" name="zipcode" value="610000" class="add_ipt" /></td>
+              </tr>
+              <tr>
+                <td align="right">手机</td>
+                <td style="font-family:'宋体';"><input type="text" name="mobile" value="1361234587" class="add_ipt" />（必填）</td>
+                <td align="right">电话</td>
+                <td style="font-family:'宋体';"><input type="text" name="tel" value="028-12345678" class="add_ipt" /></td>
+              </tr>
+              <tr>
+                <td align="right">标志建筑</td>
+                <td style="font-family:'宋体';"><input type="text" name="sign_building" value="世外桃源大酒店" class="add_ipt" /></td>
+                <td align="right">最佳送货时间</td>
+                <td style="font-family:'宋体';"><input type="text" name="best_time" value="" class="add_ipt" /></td>
+              </tr>
+            </table>
+           	<p align="center">
+              <a href="javascript:void(0)" onclick="sublictaddress()"><img src="images/add_ad.gif" /></a>
+            </p> 
+          </form>    
+<script src="/static/jq.js"></script>
+<!-- 四级联动 -->
+<script>
+function sublictaddress(){
+  $('#addressform').submit();
+}
+$('select').on('change',function(){
+  // alert(1);
+  var parent_id = $(this).val();
+  var str = '<option value="0">请选择...</option>';
+  var obj = $(this);
+  $.ajax({
+    url:'{:url("Address/getsonAddress")}',//请求地址
+    type:'post',//请求的类型
+    dataType:'json',//返回的类型
+    data:{parent_id:parent_id},//要传输的数据
+    success:function(res){ //成功之后回调的方法
+      // 循环
+      $.each(res,function(i,v){
+          str +='<option value='+v.region_id+'>'+v.region_name+'</option>';
+      })
+      obj.next().html(str).show();
+    }
+  })
+})
+</script> 

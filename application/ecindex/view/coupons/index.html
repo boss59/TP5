@@ -1,0 +1,70 @@
+
+<!--End Menu End--> 
+<div class="i_bg">
+	<!--Begin Banner Begin-->
+    <div class="n_ban">    	
+        <div class="top_slide_wrap">
+            <ul class="slide_box bxslider">
+                <li><a href="#" style="background:url(images/n_ban.jpg) no-repeat center top;">banner1</a></li>
+                <li><a href="#" style="background:url(images/n_ban.jpg) no-repeat center top;">banner2</a></li>
+                <li><a href="#" style="background:url(images/n_ban.jpg) no-repeat center top;">banner3</a></li>
+            </ul>	
+            <div class="op_btns clearfix">
+                <a href="#" class="op_btn op_prev"><span></span></a>
+                <a href="#" class="op_btn op_next"><span></span></a>
+            </div>        
+        </div>
+    </div>
+    <!--End Banner End-->        
+            <div class="brand_t">优惠卷</div>
+            <ul class="p_sell">
+            {volist name="cou" id="v"}
+            	<li>
+                	<div class="img"><img src="images/t1.jpg" width="160" height="140" /></div>
+                    <div class="name">{$v.cat_name}</div>
+                    <div class="price">
+                    	<table border="0" style="width:100%; color:#888888;" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td>数量</td>
+                            <td>使用条件</td>
+                          </tr>
+                          <tr>
+                            <td>{$v.num}</td>                   
+                            <td>{$v.is_number}</td>
+                          </tr>
+                        </table>
+                    </div>
+                    <div class="ch_bg">
+                        <span class="ch_txt">￥<font>{$v.price}</font></span>
+                        <a href="{$v.vid}" class="ch_a" coupons="1">领取</a>
+                    </div>
+                </li>
+            {/volist}
+            </ul>
+            
+        </div>        
+<script>
+jQuery('.ch_a').on('click',function(){
+    event.preventDefault();//阻止默认事件行为的触发  a 标签
+    var id = jQuery(this).attr('href');
+    // alert(id);
+    // alert(coupons);
+    $.ajax({
+        url:"{:url('Coupons/pons')}",//请求地址
+        type:'post',//请求的类型
+        dataType:'json',//返回的类型
+        data:{vid:id},//要传输的数据
+        success:function(res){ //成功之后回调的方法
+            if (res.ret =="0") {
+                if (confirm(res.msg)) {
+                    location.href = "{:url('Login/login')}";
+                }
+            }
+            if (res.ret =="1") {
+                alert(res.msg);
+            }
+        }
+    })
+})
+</script>
+        
